@@ -10,6 +10,7 @@ ROUTER.get('/mensajes', (req: Request, res: Response) => {
   });
 });
 
+
 ROUTER.post('/mensajes/:id', (req: Request, res: Response) => {
 
   const cuerpo = req.body.cuerpo;

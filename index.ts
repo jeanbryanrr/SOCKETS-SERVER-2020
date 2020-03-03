@@ -1,9 +1,11 @@
 import Server from "./clases/server";
-import ROUTER from "./routes/route";
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import ROUTER from "./routes/route";
 
-const server = new Server();
+
+
+const server = Server.instance;
 //bosy parser 
 server.app.use(bodyParser.urlencoded({ extended: true }));
 server.app.use(bodyParser.json());
@@ -17,3 +19,5 @@ server.start(() => {
 
     console.log(`server run ${server.port}`);
 })
+
+

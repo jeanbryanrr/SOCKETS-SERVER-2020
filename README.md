@@ -8,3 +8,5 @@ tsc -w
 
 
 node dist/
+
+git checkout -- .
