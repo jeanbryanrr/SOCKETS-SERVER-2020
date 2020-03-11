@@ -1,5 +1,5 @@
 import express from 'express';
-import { SERVER_PORT } from '../global/environment';
+import { SERVER_PORT, SERVER_IP } from '../global/environment';
 import http from 'http';
 import sockectIO from 'socket.io';
 import * as socket from '../sockets/sockets';
@@ -11,9 +11,11 @@ export default class Server {
     public port: number;
     public io: sockectIO.Server;
     private httpServer: http.Server;
+    private ip: string;
     private constructor() {
         this.app = express();
         this.port = SERVER_PORT;
+        this.ip = SERVER_IP
         this.httpServer = new http.Server(this.app);
         this.io = sockectIO(this.httpServer);
         this.esucharSockets();
@@ -26,22 +28,24 @@ export default class Server {
         return this._instance || (this._instance = new this());
     }
     private esucharSockets() {
-        console.log('escuchando conexiones - sockets');
+
 
         this.io.on('connection', cliente => {
-            console.log('nueov cliente conectado');
 
+            socket.conectarCliente(cliente);
+
+            socket.mensaje(cliente, this.io);
             //desconectar
             socket.desconectar(cliente);
-
+            socket.configurarUsuario(cliente, this.io);
 
         });
     }
-
+ 
 
     start(callback: any) {
 
-        this.httpServer.listen(this.port, callback);
+        this.httpServer.listen(this.port, this.ip, callback);
 
     }
 
