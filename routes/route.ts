@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import Server from '../clases/server';
 import { Socket } from 'socket.io';
+import { usuariiosConectado } from '../sockets/sockets';
 
 const ROUTER = Router();
 ROUTER.get('/mensajes', (req: Request, res: Response) => {
@@ -51,6 +52,17 @@ ROUTER.get('/usuarios', (req: Request, res: Response) => {
 
 });
 
+
+//service para obtener todos los ids
+ROUTER.get('/usuarios-detalle', (req: Request, res: Response) => {
+
+
+  return res.json({
+    ok: false,
+    err: usuariiosConectado.getLista()
+  });
+
+});
 
 
 export default ROUTER;
