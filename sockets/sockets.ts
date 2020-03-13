@@ -11,13 +11,14 @@ export const conectarCliente = (cliente: Socket) => {
     usuariiosConectado.agregarUsuario(usuario)
 };
 
-export const desconectar = (cliente: Socket,io:sockectIO.Server) => {
+export const desconectar = (cliente: Socket, io: sockectIO.Server) => {
     cliente.on('disconnect', () => {
         const user = usuariiosConectado.borrarUsuario(cliente.id);
         console.log('user delete', user);
+        io.emit('usuarios-activos', usuariiosConectado.getLista());
     });
 
- 
+
 };
 
 //escuchar mensaje
@@ -35,12 +36,20 @@ export const mensaje = (cliente: Socket, io: sockectIO.Server) => {
 export const configurarUsuario = (cliente: Socket, io: sockectIO.Server) => {
     cliente.on('configurar-usuario', (payload: { nombre: string }, callback: Function) => {
         usuariiosConectado.actualizarNombre(cliente.id, payload.nombre);
-      
-         io.emit('usuarios-activos',usuariiosConectado.getLista());
+
+        io.emit('usuarios-activos', usuariiosConectado.getLista());
         callback({
             ok: true,
             mensaje: `Usuario ${payload.nombre} configurado`
         });
 
+    });
+};
+
+//config user
+export const obtenerUsuarios = (cliente: Socket, io: sockectIO.Server) => {
+
+    cliente.on('obtener-usuarios', () => {
+        io.to(cliente.id).emit('usuarios-activos', usuariiosConectado.getLista());
     });
 };

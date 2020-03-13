@@ -4,7 +4,7 @@ export class Usuario {
     public sala: string;
     constructor(id: string) {
         this.id = id;
-        this.nombre = 'Sin- Nombre';
+        this.nombre = 'Sin-Nombre';
         this.sala = 'Sin sala';
 
     }

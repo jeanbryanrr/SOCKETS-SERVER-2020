@@ -32,7 +32,9 @@ export class UsuarioListas {
 
 
     public getLista() {
-        return this.lista;
+        return this.lista.filter(user=>{
+            return user.nombre !== 'Sin-Nombre';
+        });
     }
 
 
