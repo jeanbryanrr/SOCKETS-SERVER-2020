@@ -15,24 +15,25 @@ export class UsuarioListas {
 
     }
 
-    public actualizarNombre(id: string, nombre: string) {
+    public actualizarUsuario(id: string, idUsuario: string, nombre: string) {
 
         for (const iterator of this.lista) {
             if (iterator.id === id) {
 
                 iterator.nombre = nombre;
+                iterator.idUsuario = idUsuario;
                 break;
 
             }
         }
 
-        console.log('Actualizando usuario',this.lista);
-        
+        console.log('Actualizando usuario', this.lista);
+
     }
 
 
     public getLista() {
-        return this.lista.filter(user=>{
+        return this.lista.filter(user => {
             return user.nombre !== 'Sin-Nombre';
         });
     }
@@ -61,4 +62,12 @@ export class UsuarioListas {
 
         return tempUser;
     }
+
+    public getUsuarioPorIdUser(id: string | number) {
+
+        return this.lista.find(usuario => {
+            return usuario.idUsuario === id;
+        });
+    }
+
 }

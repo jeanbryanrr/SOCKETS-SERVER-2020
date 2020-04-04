@@ -13,23 +13,33 @@ ROUTER.get('/mensajes', (req: Request, res: Response) => {
 });
 
 
-ROUTER.post('/mensajes/:id', (req: Request, res: Response) => {
+ROUTER.post('/mensajes', (req: Request, res: Response) => {
 
-  const cuerpo = req.body.cuerpo;
-  const de = req.body.de;
-  const id = req.params.id;
-  const payload = {
-    de, cuerpo
-  }
+  const pedido = req.body.pedido;
+
+  const clienteId = req.body.pedido.usuario;
+  const idPedido: number = parseInt(req.body.pedido_id);
+  const modbuss = req.body.modbuss;
+  const user = usuariiosConectado.getUsuarioPorIdUser(clienteId);
   const server = Server.instance;
-  server.io.in(id).emit('mensaje-privado', payload);
-  res.json({
-    ok: true,
-    cuerpo,
-    de,
-    id
+  const userSocketId = user?.id;
+  let socket = '';
+  if (userSocketId !== undefined) {
+    socket = userSocketId;
+    server.io.in(socket).emit('escuchar-preparar-jugo', { idPedido, pedido, modbuss });
+    res.json({
+      ok: true,
+      mensaje: 'ok!'
+    });
+  } else {
+    res.json({
+      estado: false,
+      status: 500,
+      mensaje: 'No se obtuvo el SocketId'
+    });
+  }
 
-  });
+
 });
 
 
